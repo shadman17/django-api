@@ -42,7 +42,15 @@ class ProductDestroyAPIView(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
 
-
+class ProductMixinView(mixins.ListModelMixin,generics.GenericAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer          
+    
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    # def post():
+    #     return
 
 @api_view(['GET', 'POST'])    
 def product_alt_view(request, pk=None, *args, **kwargs):
