@@ -1,14 +1,17 @@
-from rest_framework import generics, mixins
+from rest_framework import authentication, generics, mixins, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 from .models import Product
 from .serializers import ProductSerializer
+from .permissions import IsStaffEditorPermission
 
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer    
+    serializer_class = ProductSerializer
+    authentication_classes = [authentication.SessionAuthentication]
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] #Permission Ordering matters
     
     def perform_create(self, serializer):
         print(serializer.validated_data)
@@ -21,7 +24,7 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # lookup_field = 'pk'
+    lookup_field = 'pk'
     # Product.objects.get(pk='abc')
     
 class ProductUpdateAPIView(generics.UpdateAPIView):
