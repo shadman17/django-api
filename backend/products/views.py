@@ -3,6 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
+from api.authentication import TokenAuthentication
+
 from .models import Product
 from .serializers import ProductSerializer
 from .permissions import IsStaffEditorPermission
@@ -10,7 +12,7 @@ from .permissions import IsStaffEditorPermission
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [authentication.SessionAuthentication, authentication.TokenAuthentication]
+    # authentication_classes = [authentication.SessionAuthentication, TokenAuthentication]
     permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] #Permission Ordering matters
     
     def perform_create(self, serializer):
@@ -25,12 +27,16 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] #Permission Ordering matters
+    
     # Product.objects.get(pk='abc')
     
 class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] #Permission Ordering matters
+    
     
     def perform_update(self, serializer):
         instance = serializer.save()
@@ -41,6 +47,7 @@ class ProductDestroyAPIView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
+    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission] #Permission Ordering matters
     
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
