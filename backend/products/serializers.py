@@ -15,8 +15,8 @@ class ProductInlineSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(source= 'user', read_only = True)
-    related_products = ProductInlineSerializer(source='user.product_set.all', read_only=True, many=True)
-    my_discount = serializers.SerializerMethodField(read_only= True)
+    # related_products = ProductInlineSerializer(source='user.product_set.all', read_only=True, many=True)
+    # my_discount = serializers.SerializerMethodField(read_only= True)
     edit_url = serializers.SerializerMethodField(read_only= True)
     url = serializers.HyperlinkedIdentityField(view_name='product-detail', lookup_field='pk')
     title = serializers.CharField(validators=[validate_title_no_hello, unique_product_title])
@@ -34,8 +34,8 @@ class ProductSerializer(serializers.ModelSerializer):
             'content',
             'price',
             'sale_price',
-            'my_discount',
-            'related_products',
+            # 'my_discount',
+            # 'related_products',
         ]
         
     # def validate_title(self, value):
@@ -67,10 +67,10 @@ class ProductSerializer(serializers.ModelSerializer):
         
         return reverse("product-edit", kwargs={'pk': obj.pk}, request=request)
         
-    def get_my_discount(self, obj):
-        # obj.user -> I can get user.username
-        if not hasattr(obj, 'id'):
-            return None
-        if not isinstance(obj, Product):
-            return None
-        return obj.get_discount()
+    # def get_my_discount(self, obj):
+    #     # obj.user -> I can get user.username
+    #     if not hasattr(obj, 'id'):
+    #         return None
+    #     if not isinstance(obj, Product):
+    #         return None
+    #     return obj.get_discount()
