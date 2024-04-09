@@ -45,6 +45,14 @@ class Product(models.Model):
         return [random.choice(TAGS_MODEL_VALUES)]
     
     @property
+    def path(self):
+        return f"/products/{self.pk}/"
+    
+    @property
+    def body(self):
+        return self.content
+    
+    @property
     def sale_price(self):
         return "%.2f" %(float(self.price) * 0.8)
     
