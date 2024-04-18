@@ -3,5 +3,5 @@ from rest_framework.authtoken.models import Token
 
 
 class TokenAuthentication(BaseTokenAuth):
-    keyword = 'Bearer'
+    keyword = 'Token'
     
